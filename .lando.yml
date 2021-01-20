@@ -1,0 +1,30 @@
+name: typo3-master
+recipe: lamp
+proxy:
+  mailhog:
+    - typo3-master.lndo.site
+config:
+  php: '7.4'
+  webroot: public
+services:
+  appserver:
+    install_dependencies_as_root:
+      - a2enmod headers
+      - a2enmod expires
+    overrides:
+      environment:
+        TYPO3_CONTEXT: Development/Lando
+  mailhog:
+    type: mailhog:v1.0.0
+    portforward: false
+  node:
+    type: node:12
+tooling:
+  typo3cms:
+    service: appserver
+    cmd: /app/vendor/bin/typo3cms
+  typo3:
+    service: appserver
+    cmd: /app/vendor/bin/typo3
+  yarn:
+    service: node
